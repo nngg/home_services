@@ -42,11 +42,28 @@
 
     <div class="container">
         <h1>Welcome</h1>
-        <p>Click the link below to navigate to a different address:</p>
+        <p id="description">Click the link below to navigate to a different address:</p>
         
         <!-- The href attribute specifies the destination URL -->
-        <a href="https://www.google.com">Visit Google</a>
+        <a id="target-link" href="#">Loading link...</a>
+        <p id="last-updated" style="margin-top: 15px; font-size: 0.9em; color: #666;"></p>
     </div>
 
+    <script>
+        fetch('config.json')
+            .then(response => response.json())
+            .then(data => {
+                const desc = document.getElementById('description');
+                desc.innerText = desc.innerText.replace('different address', data.public_ip);
+
+                const link = document.getElementById('target-link');
+                link.href = 'http://' + data.public_ip;
+                link.innerText = 'Visit ' + data.public_ip;
+
+                const lastUpdated = document.getElementById('last-updated');
+                lastUpdated.innerText = 'Last updated: ' + data.last_updated;
+            })
+            .catch(error => console.error('Error loading config:', error));
+    </script>
 </body>
 </html>
